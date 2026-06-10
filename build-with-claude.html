@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building with Claude — Outbuild</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Outbuild wrapper ── */
+    :root {
+      --ob-white:      #FFFFFF;
+      --ob-off-white:  #F5F6F4;
+      --ob-light-grey: #E0E0E0;
+      --ob-mid-grey:   #9E9E9E;
+      --ob-charcoal:   #2C2C2C;
+      --ob-font:       -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--ob-off-white);
+      color: var(--ob-charcoal);
+      font-family: var(--ob-font);
+      min-height: 100vh;
+    }
+
+    .ob-accent-stripe {
+      height: 3px;
+      background: linear-gradient(
+        to right,
+        #88C4B0  0%      16.67%,
+        #8DBCE6  16.67%  33.33%,
+        #F0A87A  33.33%  50%,
+        #8AC0BC  50%     66.67%,
+        #D4A4E8  66.67%  83.33%,
+        #ECC860  83.33%  100%
+      );
+    }
+
+    .ob-header {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ob-wordmark {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ob-charcoal);
+      text-decoration: none;
+      font-family: var(--ob-font);
+    }
+
+    .ob-back {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ob-mid-grey);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      font-family: var(--ob-font);
+    }
+    .ob-back:hover { color: var(--ob-charcoal); }
+
+    .ob-intro {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 24px 20px;
+    }
+
+    .ob-intro-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ob-charcoal);
+      margin-bottom: 6px;
+      font-family: var(--ob-font);
+    }
+
+    .ob-intro-desc {
+      font-size: 13px;
+      color: var(--ob-mid-grey);
+      line-height: 1.5;
+      font-family: var(--ob-font);
+    }
+
+    .ob-outer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    .ob-card {
+      background: var(--ob-white);
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .ob-copyright {
+      text-align: center;
+      padding: 0 24px 28px;
+      font-size: 11px;
+      color: var(--ob-light-grey);
+      font-family: var(--ob-font);
+    }
+
+    @media (max-width: 480px) {
+      .ob-outer { padding: 0 16px 36px; }
+      .ob-header { padding: 16px 16px 0; }
+      .ob-intro { padding: 20px 16px 16px; }
+    }
+
+    /* ── Original content styles (preserved inside .ob-card) ── */
+
+    .ob-card {
+      --ink: #0f0e0c;
+      --paper: #ffffff;
+      --accent: #d4541a;
+      --accent2: #2a5c8a;
+      --accent3: #2a7a4a;
+      --warning: #9a3a2a;
+      --phase0: #5a3a8a;
+      --muted: #8a8070;
+      --line: #d8d0c0;
+    }
+
+    .ob-card .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ob-white);
+      border-bottom: 1px solid #d8d0c0;
+      padding: 0 24px;
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: 0 1px 12px rgba(15,14,12,0.06);
+      border-radius: 14px 14px 0 0;
+    }
+    .ob-card .sticky-nav::-webkit-scrollbar { display: none; }
+
+    .ob-card .nav-item {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 10px 14px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s; white-space: nowrap;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .ob-card .nav-item:hover { border-bottom-color: #d8d0c0; }
+    .ob-card .nav-item.active { border-bottom-color: #d4541a; }
+    .ob-card .nav-item.active .nav-phase { color: #d4541a; }
+    .ob-card .nav-phase {
+      font-family: 'DM Mono', monospace; font-size: 8px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: #8a8070; margin-bottom: 2px; transition: color 0.2s;
+    }
+    .ob-card .nav-title { font-size: 12px; font-weight: 600; color: #0f0e0c; letter-spacing: -0.01em; }
+    .ob-card .nav-item.prereq-nav .nav-phase { color: #5a3a8a; }
+    .ob-card .nav-item.prereq-nav.active { border-bottom-color: #5a3a8a; }
+    .ob-card .nav-item.prereq-nav.active .nav-phase { color: #5a3a8a; }
+    .ob-card .nav-divider { width: 1px; background: #d8d0c0; margin: 8px 0; flex-shrink: 0; }
+
+    .ob-card .page {
+      max-width: 720px; margin: 0 auto; padding: 48px 24px 80px;
+      font-family: 'Fraunces', Georgia, serif;
+      color: #0f0e0c;
+    }
+
+    .ob-card header { margin-bottom: 48px; border-bottom: 2px solid #0f0e0c; padding-bottom: 24px; }
+    .ob-card .eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: #8a8070; margin-bottom: 12px;
+    }
+    .ob-card h1 {
+      font-size: clamp(28px, 5vw, 46px); font-weight: 300;
+      line-height: 1.1; letter-spacing: -0.02em;
+    }
+    .ob-card h1 em { font-style: italic; color: #d4541a; }
+
+    .ob-card .quick-overview { margin-bottom: 56px; }
+    .ob-card .quick-overview-label {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: #8a8070; margin-bottom: 16px;
+    }
+
+    .ob-card .overview-prereq { margin-bottom: 12px; }
+    .ob-card .ov-prereq-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px;
+      background: rgba(90,58,138,0.05);
+      border: 1px solid rgba(90,58,138,0.2);
+      border-radius: 4px; text-decoration: none; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .ob-card .ov-prereq-card:hover { background: rgba(90,58,138,0.09); }
+    .ob-card .ov-prereq-icon { font-family: 'DM Mono', monospace; font-size: 10px; color: #5a3a8a; letter-spacing: 0.1em; flex-shrink: 0; }
+    .ob-card .ov-prereq-text { flex: 1; }
+    .ob-card .ov-prereq-title { font-size: 14px; font-weight: 600; color: #5a3a8a; margin-bottom: 2px; }
+    .ob-card .ov-prereq-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: #8a8070; }
+    .ob-card .ov-prereq-arrow { font-family: 'DM Mono', monospace; font-size: 11px; color: #5a3a8a; opacity: 0.5; }
+
+    .ob-card .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 560px) { .ob-card .overview-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .ob-card .ov-phase-card {
+      display: block; padding: 14px 16px;
+      background: rgba(0,0,0,0.02); border: 1px solid #d8d0c0; border-radius: 4px;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .ob-card .ov-phase-card:hover { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.15); }
+    .ob-card .ov-phase-tag { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: #d4541a; margin-bottom: 6px; }
+    .ob-card .ov-phase-name { font-size: 13px; font-weight: 600; color: #0f0e0c; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .ob-card .ov-step-list { display: flex; flex-direction: column; gap: 4px; }
+    .ob-card .ov-step-row { display: flex; align-items: baseline; gap: 6px; }
+    .ob-card .ov-step-num { font-family: 'DM Mono', monospace; font-size: 9px; color: #8a8070; flex-shrink: 0; width: 22px; }
+    .ob-card .ov-step-name { font-size: 11px; font-weight: 600; color: #0f0e0c; line-height: 1.3; }
+    .ob-card .ov-step-name.security { color: #9a3a2a; }
+
+    .ob-card .overview-ongoing { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
+    .ob-card .overview-ongoing-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8070; }
+    .ob-card .overview-ongoing-pill {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      background: rgba(212,84,26,0.08); border: 1px solid rgba(212,84,26,0.2);
+      color: #d4541a; padding: 3px 10px; border-radius: 20px; text-decoration: none;
+    }
+    .ob-card .overview-ongoing-pill:hover { background: rgba(212,84,26,0.14); }
+    .ob-card .overview-hint {
+      margin-top: 16px; font-family: 'DM Mono', monospace;
+      font-size: 10px; color: #8a8070; letter-spacing: 0.08em;
+      text-align: center; padding-top: 12px; border-top: 1px solid #d8d0c0;
+    }
+
+    .ob-card .section-divider {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: #8a8070; margin-bottom: 32px;
+      padding-bottom: 8px; border-bottom: 1px solid #d8d0c0;
+    }
+
+    .ob-card .prereq-block { margin-bottom: 48px; }
+    .ob-card .prereq-header-label {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #5a3a8a; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ob-card .prereq-header-label::after { content: ''; flex: 1; height: 1px; background: rgba(90,58,138,0.25); }
+    .ob-card .prereq-inner {
+      padding: 24px 28px;
+      background: rgba(90,58,138,0.04);
+      border: 1px solid rgba(90,58,138,0.22); border-radius: 4px;
+    }
+    .ob-card .prereq-title { font-size: 18px; font-weight: 600; color: #5a3a8a; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .ob-card .prereq-desc { font-size: 13px; font-weight: 300; font-style: italic; color: #4a4540; line-height: 1.6; margin-bottom: 14px; }
+    .ob-card .prereq-note { font-family: 'DM Mono', monospace; font-size: 11px; color: #5a3a8a; background: rgba(90,58,138,0.07); padding: 6px 10px; border-left: 2px solid #5a3a8a; line-height: 1.5; margin-bottom: 16px; }
+
+    .ob-card .collapse-toggle {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.08em; cursor: pointer; user-select: none;
+      background: none; border: none; padding: 0; margin-bottom: 0;
+    }
+    .ob-card .collapse-toggle .arrow { display: inline-block; transition: transform 0.2s ease; }
+    .ob-card .collapse-toggle.open .arrow { transform: rotate(90deg); }
+    .ob-card .collapse-body { display: none; }
+    .ob-card .collapse-body.open { display: block; }
+    .ob-card .claudemd-toggle { color: #5a3a8a; margin-bottom: 12px; }
+    .ob-card .claudemd-toggle:hover { opacity: 0.75; }
+    .ob-card .prompt-toggle { color: #2a7a4a; margin-top: 10px; }
+    .ob-card .prompt-toggle:hover { opacity: 0.75; }
+
+    .ob-card .claudemd-list { border: 1px solid rgba(90,58,138,0.2); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+    .ob-card .claudemd-hint { font-family: 'DM Mono', monospace; font-size: 10px; color: #8a8070; font-style: normal; margin-bottom: 10px; line-height: 1.5; }
+    .ob-card .claudemd-group-label {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: #5a3a8a; background: rgba(90,58,138,0.06);
+      padding: 6px 12px; border-bottom: 1px solid rgba(90,58,138,0.15);
+      border-top: 1px solid rgba(90,58,138,0.1);
+    }
+    .ob-card .claudemd-group-label:first-child { border-top: none; }
+    .ob-card .claudemd-items { padding: 8px 12px; display: flex; flex-direction: column; }
+    .ob-card .claudemd-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px dashed rgba(90,58,138,0.1); }
+    .ob-card .claudemd-item:last-child { border-bottom: none; }
+    .ob-card .claudemd-bullet { font-family: 'DM Mono', monospace; font-size: 11px; color: #5a3a8a; flex-shrink: 0; padding-top: 1px; opacity: 0.5; }
+    .ob-card .claudemd-text { font-size: 13px; font-weight: 300; font-style: italic; color: #4a4540; line-height: 1.5; }
+    .ob-card .claudemd-text strong { font-weight: 600; font-style: normal; color: #0f0e0c; }
+
+    .ob-card .prompt-body {
+      display: none; margin-top: 8px;
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: #2a7a4a; background: rgba(42,122,74,0.06);
+      padding: 10px 12px; border-left: 2px solid #2a7a4a;
+      line-height: 1.6; white-space: pre-wrap;
+    }
+    .ob-card .prompt-body.open { display: block; }
+
+    .ob-card .phase { margin-bottom: 56px; }
+    .ob-card .phase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #d4541a; margin-bottom: 4px; }
+    .ob-card .phase-title { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #d8d0c0; }
+
+    .ob-card .step {
+      display: grid; grid-template-columns: 44px 1fr; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid #d8d0c0;
+      opacity: 0; transform: translateY(10px);
+      animation: fadeUp 0.4s ease forwards;
+    }
+    .ob-card .step:last-child { border-bottom: none; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .ob-card .step-num { font-family: 'DM Mono', monospace; font-size: 11px; color: #8a8070; padding-top: 2px; letter-spacing: -0.01em; }
+    .ob-card .step-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ob-card .tag {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 2px 6px; border-radius: 2px; font-weight: 500;
+      background: rgba(212,84,26,0.1); color: #d4541a;
+      border: 1px solid rgba(212,84,26,0.2);
+    }
+    .ob-card .tag-security { background: rgba(154,58,42,0.1); color: #9a3a2a; border: 1px solid rgba(154,58,42,0.25); }
+    .ob-card .step-desc { font-size: 13px; font-weight: 300; color: #4a4540; line-height: 1.6; font-style: italic; }
+    .ob-card .step-note { margin-top: 8px; font-family: 'DM Mono', monospace; font-size: 11px; color: #2a5c8a; background: rgba(42,92,138,0.07); padding: 6px 10px; border-left: 2px solid #2a5c8a; line-height: 1.5; }
+    .ob-card .step-note.warn { color: #9a3a2a; background: rgba(154,58,42,0.07); border-left-color: #9a3a2a; }
+    .ob-card .step.security-step { background: rgba(154,58,42,0.03); border-left: 2px solid rgba(154,58,42,0.2); padding-left: 12px; margin-left: -14px; }
+
+    .ob-card .loop-box { margin-top: 12px; border: 1px solid #d8d0c0; border-radius: 3px; overflow: hidden; }
+    .ob-card .loop-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #8a8070; background: rgba(0,0,0,0.04); padding: 6px 12px; border-bottom: 1px solid #d8d0c0; }
+    .ob-card .loop-steps { padding: 10px 12px; display: flex; flex-direction: column; }
+    .ob-card .loop-item { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px dashed #d8d0c0; }
+    .ob-card .loop-item:last-child { border-bottom: none; }
+    .ob-card .loop-arrow { font-family: 'DM Mono', monospace; font-size: 11px; color: #d4541a; flex-shrink: 0; }
+    .ob-card .loop-text { font-size: 13px; font-weight: 300; font-style: italic; color: #4a4540; line-height: 1.5; }
+    .ob-card .loop-text strong { font-weight: 600; font-style: normal; color: #0f0e0c; }
+
+    .ob-card .ongoing-phase { margin-bottom: 48px; padding: 24px; border: 1px dashed #d8d0c0; border-radius: 4px; }
+    .ob-card .ongoing-phase .phase-label { color: #8a8070; }
+    .ob-card .ongoing-phase .phase-title { font-size: 20px; border-bottom-style: dashed; }
+
+    .ob-card .step:nth-child(1) { animation-delay: 0.04s; }
+    .ob-card .step:nth-child(2) { animation-delay: 0.08s; }
+    .ob-card .step:nth-child(3) { animation-delay: 0.12s; }
+    .ob-card .step:nth-child(4) { animation-delay: 0.16s; }
+    .ob-card .step:nth-child(5) { animation-delay: 0.20s; }
+
+    .ob-card footer {
+      margin-top: 56px; padding-top: 20px;
+      border-top: 2px solid #0f0e0c;
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: #8a8070; display: flex; justify-content: space-between;
+    }
+    .ob-card code { font-family: 'DM Mono', monospace; font-size: 11px; background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="ob-accent-stripe"></div>
+
+<div class="ob-header">
+  <a href="/" class="ob-wordmark">outbuild</a>
+  <a href="/" class="ob-back">← all apps</a>
+</div>
+
+<div class="ob-intro">
+  <p class="ob-intro-title">Building with Claude</p>
+  <p class="ob-intro-desc">Personal exploration of how to work with Claude Code — documenting learnings as I go for reference.</p>
+</div>
+
+<div class="ob-outer">
+  <div class="ob-card">
+
+    <nav class="sticky-nav" id="sticky-nav">
+      <a class="nav-item prereq-nav" href="#detail-prereq">
+        <div class="nav-phase">Before you start</div>
+        <div class="nav-title">Prerequisites</div>
+      </a>
+      <div class="nav-divider"></div>
+      <a class="nav-item" href="#detail-phase1">
+        <div class="nav-phase">Phase 01</div>
+        <div class="nav-title">Define</div>
+      </a>
+      <a class="nav-item" href="#detail-phase2">
+        <div class="nav-phase">Phase 02</div>
+        <div class="nav-title">Stack</div>
+      </a>
+      <a class="nav-item" href="#detail-phase3">
+        <div class="nav-phase">Phase 03</div>
+        <div class="nav-title">Scaffold</div>
+      </a>
+      <a class="nav-item" href="#detail-phase4">
+        <div class="nav-phase">Phase 04</div>
+        <div class="nav-title">Build</div>
+      </a>
+      <div class="nav-divider"></div>
+      <a class="nav-item" href="#detail-ongoing">
+        <div class="nav-phase">Always on</div>
+        <div class="nav-title">Backlog</div>
+      </a>
+    </nav>
+
+    <div class="page">
+
+      <header>
+        <p class="eyebrow">A working framework</p>
+        <h1>Building apps<br>with <em>Claude</em></h1>
+      </header>
+
+      <div class="quick-overview">
+        <p class="quick-overview-label">At a glance — click any section to jump to detail</p>
+        <div class="overview-prereq">
+          <a class="ov-prereq-card" href="#detail-prereq">
+            <div class="ov-prereq-icon">PRE</div>
+            <div class="ov-prereq-text">
+              <div class="ov-prereq-title">Prerequisites — CLAUDE.md</div>
+              <div class="ov-prereq-sub">Set boundaries &amp; guardrails before a single line of code</div>
+            </div>
+            <div class="ov-prereq-arrow">→</div>
+          </a>
+        </div>
+        <div class="overview-grid">
+          <a class="ov-phase-card" href="#detail-phase1">
+            <div class="ov-phase-tag">01 · Define</div>
+            <div class="ov-phase-name">Define the idea</div>
+            <div class="ov-step-list">
+              <div class="ov-step-row"><span class="ov-step-num">1.1</span><span class="ov-step-name">Create the PRD</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">1.2</span><span class="ov-step-name">Grill me</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">1.3</span><span class="ov-step-name">Build plan</span></div>
+            </div>
+          </a>
+          <a class="ov-phase-card" href="#detail-phase2">
+            <div class="ov-phase-tag">02 · Stack</div>
+            <div class="ov-phase-name">Choose your stack</div>
+            <div class="ov-step-list">
+              <div class="ov-step-row"><span class="ov-step-num">2.1</span><span class="ov-step-name">Tech stack</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">2.2</span><span class="ov-step-name">Tools &amp; integrations</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">2.3</span><span class="ov-step-name">Env &amp; secrets</span></div>
+            </div>
+          </a>
+          <a class="ov-phase-card" href="#detail-phase3">
+            <div class="ov-phase-tag">03 · Scaffold</div>
+            <div class="ov-phase-name">Set up &amp; scaffold</div>
+            <div class="ov-step-list">
+              <div class="ov-step-row"><span class="ov-step-num">3.1</span><span class="ov-step-name">GitHub repo</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">3.2</span><span class="ov-step-name">Scaffold project</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">3.3</span><span class="ov-step-name">Scaffold review</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">3.4</span><span class="ov-step-name">Test suite</span></div>
+            </div>
+          </a>
+          <a class="ov-phase-card" href="#detail-phase4">
+            <div class="ov-phase-tag">04 · Build</div>
+            <div class="ov-phase-name">Build</div>
+            <div class="ov-step-list">
+              <div class="ov-step-row"><span class="ov-step-num">4.1</span><span class="ov-step-name">Chunk + review loop</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">4.2</span><span class="ov-step-name">PRD drift check</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">4.3</span><span class="ov-step-name">Error handling</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">4.4</span><span class="ov-step-name security">Security audit</span></div>
+              <div class="ov-step-row"><span class="ov-step-num">4.5</span><span class="ov-step-name">Pre-launch</span></div>
+            </div>
+          </a>
+        </div>
+        <div class="overview-ongoing">
+          <span class="overview-ongoing-label">Ongoing</span>
+          <a class="overview-ongoing-pill" href="#detail-ongoing">→ Backlog</a>
+        </div>
+        <p class="overview-hint">↓ scroll for detail &nbsp;·&nbsp; use the nav bar to jump between phases</p>
+      </div>
+
+      <p class="section-divider">Detail — expand prompts as needed</p>
+
+      <!-- PREREQ -->
+      <div class="prereq-block" id="detail-prereq">
+        <div class="prereq-header-label">Prerequisite — before you start</div>
+        <div class="prereq-inner">
+          <div class="prereq-title">Create a <code>CLAUDE.md</code> file <span class="tag" style="background:rgba(90,58,138,0.1);color:#5a3a8a;border-color:rgba(90,58,138,0.25);">do this first</span></div>
+          <div class="prereq-desc">Claude Code reads <code>CLAUDE.md</code> automatically at the start of every session. Write your ground rules here once and they apply everywhere — no need to repeat them per conversation. Essential on a work laptop, shared machine, or any environment where unintended changes would be costly.</div>
+          <div class="prereq-note">CLAUDE.md lives in your project root. It's the single best protection against vibe-coding landmines — set it up before a single line of code is written.</div>
+          <button class="collapse-toggle claudemd-toggle" onclick="toggleCollapse(this)">
+            <span class="arrow">▶</span> Things to consider including — expand to see
+          </button>
+          <div class="collapse-body">
+            <div style="height:10px;"></div>
+            <div class="claudemd-hint">These are suggestions — not everything will apply to every project. Pick what's relevant and adapt to your setup, team, and tech stack.</div>
+            <div class="claudemd-list">
+              <div class="claudemd-group-label">File access</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Scope restriction</strong> — only read and write files within a defined project folder. Never touch anything outside it.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Ask before editing</strong> — show what you plan to change and wait for confirmation. No silent edits.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>No deleting files without asking</strong> — deletions are irreversible outside git.</div></div>
+              </div>
+              <div class="claudemd-group-label">Planning &amp; transparency</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Explain before doing</strong> — for any non-trivial action, explain what you're about to do, why, and what the risks are.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Ask, don't assume</strong> — ask clarifying questions rather than fill gaps with assumptions.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Be explicit about uncertainty</strong> — distinguish between <em>Verified</em>, <em>Assumed</em>, and <em>Estimated</em>. Never present a guess as a fact.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Don't claim something works unless it was tested</strong> — if it wasn't run, say so.</div></div>
+              </div>
+              <div class="claudemd-group-label">Change management</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>One thing at a time</strong> — make one change, confirm it works, then move on.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Prefer incremental, reversible changes</strong> — favour changes that can be undone over rewrites that can't.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Ask before significant changes</strong> — confirm before modifying many files, refactoring, changing auth, modifying DB schema, or replacing working functionality.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Prefer simple, maintainable solutions</strong> — avoid premature optimisation and unnecessary complexity.</div></div>
+              </div>
+              <div class="claudemd-group-label">Security</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>No secrets in code</strong> — never hardcode API keys, tokens, or credentials. Always use environment variables.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Warn before auth changes</strong> — flag any change to authentication, API keys, or tokens before touching them.</div></div>
+              </div>
+              <div class="claudemd-group-label">Dependencies</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>No package installs without asking</strong> — confirm before adding any dependency. On a work machine this can trigger security alerts.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Justify new dependencies</strong> — explain why it's needed, what alternatives were considered, and the tradeoffs. Keep the dependency set lean.</div></div>
+              </div>
+              <div class="claudemd-group-label">Git</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>No git pushes without asking</strong> — never run <code>git push</code> automatically. Confirm before anything leaves the local machine.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Use branches for significant work</strong> — descriptive names with <code>fix/</code>, <code>feat/</code>, or <code>chore/</code> prefixes.</div></div>
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>Never merge to main without permission</strong> — always get explicit sign-off before merging.</div></div>
+              </div>
+              <div class="claudemd-group-label">Completion summary</div>
+              <div class="claudemd-items">
+                <div class="claudemd-item"><span class="claudemd-bullet">→</span><div class="claudemd-text"><strong>End every significant task with a summary</strong> — what changed and why, test results, known risks, what couldn't be verified, recommended next steps, and a confidence score (1–10).</div></div>
+              </div>
+            </div>
+          </div>
+          <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)" style="margin-top:14px;">
+            <span class="arrow">▶</span> Example prompt to generate it
+          </button>
+          <div class="collapse-body">
+            <div class="prompt-body open" style="margin-top:8px;">"Help me create a CLAUDE.md file for my project. This file will set the ground rules for how you work in this codebase.
+
+Ask me a few questions first so the rules fit my situation — for example: am I on a work laptop or personal machine? Is this project in a shared repo or local only? Do I have a preferred tech stack or is that TBD? Are there any tools, APIs, or services I know I'll be using?
+
+Based on my answers, generate a CLAUDE.md covering the areas that are relevant: file access boundaries, how you should handle edits and confirmations, secrets and security rules, dependency management, git workflow, and how you should communicate uncertainty or summarise completed work.
+
+Note which rules are project-specific and which are general best practice, so I can update them easily as the project evolves."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 1 -->
+      <div class="phase" id="detail-phase1">
+        <p class="phase-label">Phase 01</p>
+        <h2 class="phase-title">Define the idea</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1.1</span>
+            <div>
+              <div class="step-title">Create the PRD</div>
+              <div class="step-desc">Ask Claude to generate a Product Requirements Document — have it ask clarifying questions to sharpen the idea before writing anything down.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"I want to build [idea]. Before writing the PRD, ask me any clarifying questions you need to fully understand the product. Then generate a PRD covering: goals, users, core features, out of scope, and success metrics."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">1.2</span>
+            <div>
+              <div class="step-title">Grill me</div>
+              <div class="step-desc">Pressure-test your brief. Claude interrogates what you've provided and surfaces anything missing or underspecified.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Read the PRD above and grill me on it. What's underspecified, contradictory, or missing? Don't let me off the hook — push hard on anything vague."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">1.3</span>
+            <div>
+              <div class="step-title">Create a build plan</div>
+              <div class="step-desc">Separate from the PRD — defines how and in what order you'll build. Save as <code>BUILDPLAN.md</code> in your repo.</div>
+              <div class="step-note">PRD = what you're building &nbsp;·&nbsp; Build plan = how and in what order</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Based on this PRD, create a step-by-step build plan. Break it into logical chunks that can each be built and tested independently. Order them so each chunk builds on verified work. Save as BUILDPLAN.md."</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase" id="detail-phase2">
+        <p class="phase-label">Phase 02</p>
+        <h2 class="phase-title">Choose your stack</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">2.1</span>
+            <div>
+              <div class="step-title">Tech stack conversation</div>
+              <div class="step-desc">Share your PRD and ask Claude to recommend a framework, database, and hosting. Let it justify choices against your requirements.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Based on this PRD, recommend a tech stack — framework, database, hosting, and any key libraries. Justify each choice against the requirements. Flag any trade-offs I should know about."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2.2</span>
+            <div>
+              <div class="step-title">Tools &amp; integrations</div>
+              <div class="step-desc">Decide on specific third-party tools — Resend, Stripe, Clerk, etc. Write these back into the PRD before any code is written.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"I want to use [Resend / Stripe / Clerk / etc.] for [email / payments / auth]. Are these good fits for this stack? What else do I need to decide before we start building? Update the PRD with all confirmed tools."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2.3</span>
+            <div>
+              <div class="step-title">Environment &amp; secrets setup</div>
+              <div class="step-desc">Define all required environment variable names before any code runs. Claude needs to know the key names (not values) to reference them correctly.</div>
+              <div class="step-note">A missing env variable will silently block everything downstream.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"List every environment variable this project will need based on our stack and integrations. Give me the variable names and what each is for. I'll supply the values — just make sure the code references them correctly everywhere."</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase" id="detail-phase3">
+        <p class="phase-label">Phase 03</p>
+        <h2 class="phase-title">Set up &amp; scaffold</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">3.1</span>
+            <div>
+              <div class="step-title">Create the GitHub repo</div>
+              <div class="step-desc">Set up your repository. Claude Code can do this for you if needed.</div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3.2</span>
+            <div>
+              <div class="step-title">Scaffold the project</div>
+              <div class="step-desc">Ask Claude to build the empty structure — no content, just the skeleton. Verify it builds cleanly before writing a single feature.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Scaffold the project based on our agreed stack. Empty structure only — no features, no placeholder content. It should build without errors and connect to GitHub. Include BUILDPLAN.md in the root."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3.3</span>
+            <div>
+              <div class="step-title">Scaffold review</div>
+              <div class="step-desc">Before writing any features, ask Claude to review the empty scaffold — structure, dependencies, config. A bad scaffold silently breaks everything built on top.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Review this scaffold before we start building. Check: folder structure, dependencies, config files, and environment variable wiring. Flag anything misconfigured or that will cause problems later."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3.4</span>
+            <div>
+              <div class="step-title">Set up the test suite</div>
+              <div class="step-desc">Get a test suite in place before any features are written. Map critical user paths, write unit and integration tests, set up a test runner.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Before we write any features, set up a test suite. Map the critical user paths from the PRD, write unit and integration tests covering those paths, and configure a test runner. Goal: every future chunk can be verified without manually clicking through everything."</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 -->
+      <div class="phase" id="detail-phase4">
+        <p class="phase-label">Phase 04</p>
+        <h2 class="phase-title">Build</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">4.1</span>
+            <div>
+              <div class="step-title">Chunk by chunk — with review loop</div>
+              <div class="step-desc">Paste one section of the build plan at a time. After each chunk, run the loop before committing.</div>
+              <div class="loop-box">
+                <div class="loop-label">The loop — repeat for every chunk</div>
+                <div class="loop-steps">
+                  <div class="loop-item"><span class="loop-arrow">01 →</span><div class="loop-text"><strong>Build</strong> — one chunk from the build plan</div></div>
+                  <div class="loop-item"><span class="loop-arrow">02 →</span><div class="loop-text"><strong>Claude reviews</strong> — bugs, edge cases, security, PRD alignment</div></div>
+                  <div class="loop-item"><span class="loop-arrow">03 →</span><div class="loop-text"><strong>Run tests</strong> — suite should still pass after every chunk</div></div>
+                  <div class="loop-item"><span class="loop-arrow">04 →</span><div class="loop-text"><strong>You test manually</strong> — run it, click it, break it</div></div>
+                  <div class="loop-item"><span class="loop-arrow">05 →</span><div class="loop-text"><strong>Commit</strong> — every green chunk is a safe point to return to</div></div>
+                </div>
+              </div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Review prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Review the code you just wrote. Check for: bugs, edge cases, security issues, anything that doesn't match the PRD, and anything that will cause problems for later chunks."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4.2</span>
+            <div>
+              <div class="step-title">PRD drift check</div>
+              <div class="step-desc">Every few chunks, compare what's been built against the original PRD. Scope creep is silent — catch it before it gets expensive.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Compare the current codebase against the original PRD. Flag: anything that drifts from the requirements, features added outside scope, and anything in the PRD we haven't addressed yet."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4.3</span>
+            <div>
+              <div class="step-title">Error handling pass</div>
+              <div class="step-desc">At the end of each major feature, run a dedicated error handling pass. Always missing if you don't ask for it explicitly.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Go through the code written so far and add proper error handling everywhere it's missing. Don't assume happy paths. Cover: failed API calls, missing data, auth errors, and unexpected user input."</div></div>
+            </div>
+          </div>
+          <div class="step security-step">
+            <span class="step-num">4.4</span>
+            <div>
+              <div class="step-title">Security &amp; secrets audit <span class="tag tag-security">review diffs</span></div>
+              <div class="step-desc">Dedicated security pass before pre-launch. Common landmines: hardcoded API keys, missing auth checks, no input validation, SQL injection openings, secrets in git history.</div>
+              <div class="step-note warn">⚠ Do not auto-accept these changes. Review every diff manually.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Do a focused security and secrets audit of the full codebase. Look for:
+→ API keys or secrets hardcoded anywhere, especially client-side
+→ Secrets that may have been committed to git history
+→ Endpoints missing auth or authorisation checks
+→ Missing or insufficient input validation
+→ SQL injection or command injection openings
+→ Any other obvious security gaps
+
+For each issue: show me where it is, explain the risk, and propose the fix. Don't auto-apply — I'll review each change before accepting."</div></div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4.5</span>
+            <div>
+              <div class="step-title">Pre-launch checklist</div>
+              <div class="step-desc">Final sweep before shipping. Security covered by 4.4 — this catches everything else not production-ready.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompt</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">"Do a full pre-launch review of the codebase. Assume a security audit has already been run. Check for: console.log statements, missing environment variables, hardcoded values that should be configurable, performance issues, and anything else not ready for production. Give me a prioritised list of what needs fixing."</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONGOING -->
+      <div class="ongoing-phase" id="detail-ongoing">
+        <p class="phase-label">Ongoing throughout</p>
+        <h2 class="phase-title">Running habits</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">∞</span>
+            <div>
+              <div class="step-title">The backlog</div>
+              <div class="step-desc">Maintain a <code>BACKLOG.md</code> in your repo — separate from the PRD and build plan. When a new idea surfaces mid-build, log it here instead of acting on it. Periodically ask Claude to organise it into waves so related changes are addressed together.</div>
+              <div class="step-note">Backlog ≠ PRD. The PRD is the agreed spec. The backlog is everything you thought of after that.</div>
+              <button class="collapse-toggle prompt-toggle" onclick="toggleCollapse(this)"><span class="arrow">▶</span> Example prompts</button>
+              <div class="collapse-body"><div class="prompt-body open" style="margin-top:8px;">Adding an item:
+"Add this to BACKLOG.md: [idea]. Don't implement it now — just log it."
+
+Organising into waves:
+"Review the backlog and organise it into waves — group related items together and order the waves so each one builds logically on the last. Flag any items that conflict with the PRD."</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span>Building with Claude · v10</span>
+        <span>Prerequisites + 4 phases + ongoing</span>
+      </footer>
+
+    </div><!-- .page -->
+  </div><!-- .ob-card -->
+</div><!-- .ob-outer -->
+
+<p class="ob-copyright">&copy; 2026 Outbuild</p>
+
+<script>
+  function toggleCollapse(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+
+  const sections = [
+    { id: 'detail-prereq', nav: 0 },
+    { id: 'detail-phase1', nav: 2 },
+    { id: 'detail-phase2', nav: 3 },
+    { id: 'detail-phase3', nav: 4 },
+    { id: 'detail-phase4', nav: 5 },
+    { id: 'detail-ongoing', nav: 7 },
+  ];
+  const navItems = document.querySelectorAll('.nav-item');
+  function setActive(i) { navItems.forEach((el, idx) => el.classList.toggle('active', idx === i)); }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const s = sections.find(s => s.id === e.target.id);
+        if (s) setActive(s.nav);
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => { const el = document.getElementById(s.id); if (el) observer.observe(el); });
+</script>
+</body>
+</html>
