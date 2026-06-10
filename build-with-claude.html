@@ -144,6 +144,87 @@
     }
     .ob-card .sticky-nav::-webkit-scrollbar { display: none; }
 
+    /* ── Mobile nav ── */
+    .nav-mobile-toggle {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--ob-font);
+    }
+
+    .nav-mobile-current {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0f0e0c;
+    }
+
+    .nav-mobile-arrow {
+      font-size: 11px;
+      color: #8a8070;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-mobile-arrow.open { transform: rotate(180deg); }
+
+    .nav-mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--ob-white);
+      border-bottom: 1px solid #d8d0c0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      flex-direction: column;
+      z-index: 99;
+    }
+
+    .nav-mobile-menu.open { display: flex; }
+
+    .nav-mobile-item {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(216,208,192,0.5);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .nav-mobile-item:last-child { border-bottom: none; }
+    .nav-mobile-item:hover { background: rgba(0,0,0,0.03); }
+
+    .nav-mobile-item-phase {
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #8a8070;
+      margin-bottom: 2px;
+    }
+
+    .nav-mobile-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f0e0c;
+    }
+
+    .nav-mobile-item.prereq-item .nav-mobile-item-phase { color: #5a3a8a; }
+
+    @media (max-width: 640px) {
+      .ob-card .sticky-nav {
+        padding: 0;
+        position: relative; /* so dropdown positions relative to it */
+      }
+      .ob-card .nav-item,
+      .ob-card .nav-divider { display: none; }
+      .nav-mobile-toggle { display: flex; height: 48px; }
+    }
+
     .ob-card .nav-item {
       display: flex; flex-direction: column; justify-content: center;
       padding: 10px 14px; cursor: pointer;
@@ -377,6 +458,7 @@
   <div class="ob-card">
 
     <nav class="sticky-nav" id="sticky-nav">
+      <!-- Desktop nav items -->
       <a class="nav-item prereq-nav" href="#detail-prereq">
         <div class="nav-phase">Before you start</div>
         <div class="nav-title">Prerequisites</div>
@@ -403,6 +485,40 @@
         <div class="nav-phase">Always on</div>
         <div class="nav-title">Backlog</div>
       </a>
+
+      <!-- Mobile toggle -->
+      <button class="nav-mobile-toggle" id="nav-mobile-toggle" onclick="toggleMobileNav()" aria-expanded="false">
+        <span class="nav-mobile-current" id="nav-mobile-current">Sections</span>
+        <span class="nav-mobile-arrow" id="nav-mobile-arrow">▾</span>
+      </button>
+
+      <!-- Mobile dropdown -->
+      <div class="nav-mobile-menu" id="nav-mobile-menu">
+        <a class="nav-mobile-item prereq-item" href="#detail-prereq" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Before you start</span>
+          <span class="nav-mobile-item-title">Prerequisites</span>
+        </a>
+        <a class="nav-mobile-item" href="#detail-phase1" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Phase 01</span>
+          <span class="nav-mobile-item-title">Define</span>
+        </a>
+        <a class="nav-mobile-item" href="#detail-phase2" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Phase 02</span>
+          <span class="nav-mobile-item-title">Stack</span>
+        </a>
+        <a class="nav-mobile-item" href="#detail-phase3" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Phase 03</span>
+          <span class="nav-mobile-item-title">Scaffold</span>
+        </a>
+        <a class="nav-mobile-item" href="#detail-phase4" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Phase 04</span>
+          <span class="nav-mobile-item-title">Build</span>
+        </a>
+        <a class="nav-mobile-item" href="#detail-ongoing" onclick="closeMobileNav()">
+          <span class="nav-mobile-item-phase">Always on</span>
+          <span class="nav-mobile-item-title">Backlog</span>
+        </a>
+      </div>
     </nav>
 
     <div class="page">
@@ -765,6 +881,22 @@ Organising into waves:
 <p class="ob-copyright">&copy; 2026 Outbuild</p>
 
 <script>
+  function toggleMobileNav() {
+    const menu = document.getElementById('nav-mobile-menu');
+    const arrow = document.getElementById('nav-mobile-arrow');
+    const toggle = document.getElementById('nav-mobile-toggle');
+    const isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  function closeMobileNav() {
+    document.getElementById('nav-mobile-menu').classList.remove('open');
+    document.getElementById('nav-mobile-arrow').classList.remove('open');
+    document.getElementById('nav-mobile-toggle').setAttribute('aria-expanded', 'false');
+  }
+
   function toggleCollapse(btn) {
     const body = btn.nextElementSibling;
     const isOpen = body.classList.contains('open');
@@ -781,7 +913,12 @@ Organising into waves:
     { id: 'detail-ongoing', nav: 7 },
   ];
   const navItems = document.querySelectorAll('.nav-item');
-  function setActive(i) { navItems.forEach((el, idx) => el.classList.toggle('active', idx === i)); }
+  const mobileLabels = { 0:'Prerequisites', 2:'Define', 3:'Stack', 4:'Scaffold', 5:'Build', 7:'Backlog' };
+  function setActive(i) {
+    navItems.forEach((el, idx) => el.classList.toggle('active', idx === i));
+    const lbl = document.getElementById('nav-mobile-current');
+    if (lbl && mobileLabels[i]) lbl.textContent = mobileLabels[i];
+  }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
