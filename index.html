@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outbuild</title>
+  <meta name="description" content="Tools for people who move." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:       #FFFFFF;
+      --off-white:   #F5F6F4;
+      --light-grey:  #E0E0E0;
+      --mid-grey:    #9E9E9E;
+      --charcoal:    #2C2C2C;
+      --font-body:   -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Accent stripe at very top ── */
+    .accent-stripe {
+      height: 3px;
+      background: linear-gradient(
+        to right,
+        #88C4B0 0% 25%,
+        #8DBCE6 25% 50%,
+        #F0A87A 50% 75%,
+        #8AC0BC 75% 100%
+      );
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--white);
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .wordmark {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--charcoal);
+      margin-bottom: 0.4rem;
+    }
+
+    .wordmark span { color: #88C4B0; }
+
+    .tagline {
+      font-size: 14px;
+      color: var(--mid-grey);
+    }
+
+    /* ── Apps section ── */
+    .apps {
+      background: var(--off-white);
+      padding: 40px 24px;
+    }
+
+    .apps-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--mid-grey);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--light-grey);
+      border-radius: 8px;
+      padding: 16px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 150ms ease, transform 200ms ease-out;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent);
+    }
+
+    .card:hover {
+      border-color: var(--card-primary);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--card-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .card-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--mid-grey);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .card-link {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--card-primary);
+      letter-spacing: 0.02em;
+    }
+
+    /* Scheme tokens */
+    .card-fern  { --card-primary: #5B8A72; --card-accent: #88C4B0; }
+    .card-slate { --card-primary: #5F7A96; --card-accent: #8DBCE6; }
+    .card-ember { --card-primary: #B06468; --card-accent: #F0A87A; }
+    .card-ocean { --card-primary: #4D8898; --card-accent: #8AC0BC; }
+
+    /* ── Copyright ── */
+    .copyright {
+      background: var(--off-white);
+      text-align: center;
+      padding: 0 24px 32px;
+      font-size: 11px;
+      color: var(--mid-grey);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .cards { grid-template-columns: 1fr; }
+      .hero  { padding: 36px 20px 32px; }
+      .apps  { padding: 32px 20px 0; }
+      .copyright { padding: 0 20px 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="accent-stripe"></div>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="wordmark">out<span>build</span></p>
+      <p class="tagline">Tools for people who move</p>
+    </div>
+  </section>
+
+  <section class="apps">
+    <div class="apps-inner">
+      <p class="section-label">Apps</p>
+      <div class="cards">
+
+        <!-- Munro Tracker — Fern -->
+        <a class="card card-fern" href="https://munro.outbuild.uk">
+          <div class="card-icon">
+            <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="2,19 8,8 12,13 15,9 20,19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="15" cy="7" r="1.5" fill="white"/>
+            </svg>
+          </div>
+          <p class="card-title">Munro Tracker</p>
+          <p class="card-desc">Track your progress through Scotland's 282 Munros with maps, logs and summit photos.</p>
+          <span class="card-link">munro.outbuild.uk →</span>
+        </a>
+
+        <!-- Marathon Pacer — Slate -->
+        <a class="card card-slate" href="https://pacer.outbuild.uk">
+          <div class="card-icon">
+            <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="12" r="7" stroke="white" stroke-width="1.75"/>
+              <line x1="11" y1="12" x2="11" y2="7.5" stroke="white" stroke-width="1.75" stroke-linecap="round"/>
+              <line x1="11" y1="12" x2="14" y2="14" stroke="white" stroke-width="1.75" stroke-linecap="round"/>
+              <line x1="9" y1="3.5" x2="13" y2="3.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="11" y1="3.5" x2="11" y2="5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="card-title">Marathon Pacer</p>
+          <p class="card-desc">Plan your perfect race with split paces, negative split strategies and GPX elevation overlays.</p>
+          <span class="card-link">pacer.outbuild.uk →</span>
+        </a>
+
+        <!-- London Marathon Spectator — Ember -->
+        <a class="card card-ember" href="https://londonmarathon.outbuild.uk">
+          <div class="card-icon">
+            <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="2" y1="16" x2="20" y2="16" stroke="white" stroke-width="1.75" stroke-linecap="round"/>
+              <rect x="4" y="8" width="3" height="8" stroke="white" stroke-width="1.5" rx="0.5"/>
+              <rect x="15" y="8" width="3" height="8" stroke="white" stroke-width="1.5" rx="0.5"/>
+              <path d="M5.5 8 Q11 4 16.5 8" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <line x1="5.5" y1="12" x2="16.5" y2="12" stroke="white" stroke-width="1.25" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="card-title">London Marathon</p>
+          <p class="card-desc">Your spectator guide to race day — find the best spots, follow friends, and soak up the atmosphere.</p>
+          <span class="card-link">londonmarathon.outbuild.uk →</span>
+        </a>
+
+        <!-- Prague Marathon Spectator — Ocean -->
+        <a class="card card-ocean" href="https://prague.outbuild.uk">
+          <div class="card-icon">
+            <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="2" y1="16" x2="20" y2="16" stroke="white" stroke-width="1.75" stroke-linecap="round"/>
+              <path d="M3 16 Q5.5 11 8 16" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M8 16 Q10.5 11 13 16" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M13 16 Q15.5 11 18 16" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <line x1="5.5" y1="12" x2="5.5" y2="8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="10.5" y1="10.5" x2="10.5" y2="7" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="15.5" y1="12" x2="15.5" y2="8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="card-title">Prague Marathon</p>
+          <p class="card-desc">Your spectator guide to race day in Prague — track runners, find viewing spots, and navigate the city.</p>
+          <span class="card-link">prague.outbuild.uk →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <p class="copyright">&copy; 2026 Outbuild</p>
+
+</body>
+</html>
