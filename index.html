@@ -172,6 +172,22 @@
       transition: color 220ms ease;
     }
 
+    .tile-beta {
+      align-self: center;          /* sit centred against the lockup, not on its baseline */
+      font-family: var(--font);
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: lowercase;
+      color: var(--muted);
+      background: none;            /* no fill */
+      border: 1px solid var(--hair);
+      border-radius: 999px;
+      padding: 0.25em 0.6em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
     .tile-situation {
       color: var(--muted);
       max-width: var(--prose);
@@ -291,32 +307,32 @@
 
         <div class="work-list">
 
-          <a class="tile" href="https://racespectator.outbuild.uk">
-            <p class="tile-lockup"><span class="product">Race Spectator Planner</span> <span class="by">by Outbuild</span></p>
-            <p class="tile-situation">Two friends, two paces, one race - and no obvious place to stand to catch them both.</p>
-            <p class="tile-does">Import a GPX route, add the runners, and see where each one will be, and when.</p>
-            <span class="tile-url">racespectator.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-
-          <a class="tile" href="https://munro.outbuild.uk">
-            <p class="tile-lockup"><span class="product">Munro Tracker</span> <span class="by">by Outbuild</span></p>
-            <p class="tile-situation">Trip planning scattered across Walkhighlands, the bothy maps and a dozen tabs.</p>
-            <p class="tile-does">Pulls the Munro and bothy resources into one place to plan the next route from Edinburgh.</p>
-            <span class="tile-url">munro.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
+          <a class="tile" href="https://scorecard.outbuild.uk">
+            <p class="tile-lockup"><span class="product">Scorecard</span> <span class="by">by Outbuild</span> <span class="tile-beta">beta</span></p>
+            <p class="tile-situation">A golf round scribbled on a crumpled card, lost before the car park.</p>
+            <p class="tile-does">A clean digital golf scorecard - record the round, keep it, look back on it.</p>
+            <span class="tile-url">scorecard.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
           <a class="tile" href="https://explore.outbuild.uk">
-            <p class="tile-lockup"><span class="product">Explore</span> <span class="by">by Outbuild</span></p>
+            <p class="tile-lockup"><span class="product">Explore</span> <span class="by">by Outbuild</span> <span class="tile-beta">beta</span></p>
             <p class="tile-situation">Every "best local spots" list on holiday is the same AI slop.</p>
             <p class="tile-does">A shareable map of real recommendations, in a host's own voice.</p>
             <span class="tile-url">explore.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
-          <a class="tile" href="https://scorecard.outbuild.uk">
-            <p class="tile-lockup"><span class="product">Scorecard</span> <span class="by">by Outbuild</span></p>
-            <p class="tile-situation">A golf round scribbled on a crumpled card, lost before the car park.</p>
-            <p class="tile-does">A clean digital golf scorecard - record the round, keep it, look back on it.</p>
-            <span class="tile-url">scorecard.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
+          <a class="tile" href="https://munro.outbuild.uk">
+            <p class="tile-lockup"><span class="product">Munro Tracker</span> <span class="by">by Outbuild</span> <span class="tile-beta">beta</span></p>
+            <p class="tile-situation">Trip planning scattered across Walkhighlands, the bothy maps and a dozen tabs.</p>
+            <p class="tile-does">Pulls the Munro and bothy resources into one place to plan the next route from Edinburgh.</p>
+            <span class="tile-url">munro.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
+          </a>
+
+          <a class="tile" href="https://racespectator.outbuild.uk">
+            <p class="tile-lockup"><span class="product">Race Spectator Planner</span> <span class="by">by Outbuild</span> <span class="tile-beta">beta</span></p>
+            <p class="tile-situation">Two friends, two paces, one race - and no obvious place to stand to catch them both.</p>
+            <p class="tile-does">Import a GPX route, add the runners, and see where each one will be, and when.</p>
+            <span class="tile-url">racespectator.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
         </div>
