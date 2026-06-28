@@ -56,6 +56,20 @@ Near-monochrome on warm paper, with at most **one** very quiet accent. No terrac
 - Body: **normal tracking, comfortable line-height.**
 - Small **uppercase labels** (letter-spaced, `--muted`, ~0.75rem) act as quiet section signposts. These are the only structural decoration.
 - **No numbered markers** (no 01 / 02 / 03). The work is a set, not a sequence.
+- **Exception — the wordmarks/lockups** (the four product names, the `by Outbuild` sign-off, and the header wordmark) do **not** use the page typeface. They follow the products' own `Logo` component so the brand reads identically here and on each live product. See §5.4.
+
+### 5.2.1 Wordmark spec (matches the products' `Logo` component)
+
+The naming lockup is a brand asset, not page typography. It uses the native **system font stack** and fixed proportions derived from a base size (the products render it at `size=40`; here the product name is set at the page's display scale and everything else scales from it):
+
+| Part | Rule |
+|---|---|
+| Font family | `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |
+| Product name | weight **700**, colour **`#1c1c1c`**, letter-spacing **-0.01em** |
+| ` by Outbuild` | font-size **0.6×** the name (the `0.36 / 0.6` ratio), weight **400**, colour **`#888888`** |
+| Layout | inline, **baseline-aligned**, gap **0.3em at the "by" size** (≈ `0.18em` of the name), line-height ~1 |
+
+All sizes scale proportionally with the product-name size. The header `Outbuild` wordmark uses the same system font, kept small at medium weight. On linked tiles the hover/focus affordance still applies (see §5.4) — `by Outbuild` shifts `#888888` → `--accent`.
 
 ### 5.3 Layout & mood
 
@@ -69,74 +83,72 @@ Generous negative space, a clear grid, content held to a readable measure. Craft
 
 - `[Product]` — solid/bold weight, `--ink`.
 - `by Outbuild` — lighter weight, `--muted`.
-- This lockup is the site's wordmark and appears on **every** work item.
-- **Hover/focus affordance** (linked work items only): quiet, **no arrow**, no movement of the lockup itself. Choose **one**: `by Outbuild` shifts `--muted` → `--accent`, **or** a thin underline appears under the product name. Keep it subtle; **disable the transition under `prefers-reduced-motion`.**
+- This lockup is the site's wordmark and appears on **every** work item. (For its exact type treatment, see §5.2.1.)
+- **Clickable affordance** (override): each work tile now shows its **product URL with a small `→` arrow** as the explicit click cue. On hover/focus the URL + arrow shift `--muted` → `--accent` (the lockup itself stays put). **Disable the transition under `prefers-reduced-motion`.** _(This supersedes the earlier "no arrow / colour-shift the by-line" affordance.)_
 
 ## 6. Page structure & content (top to bottom)
 
-Copy below is **verbatim** and must not be rewritten, expanded, or paraphrased. Hierarchy: Purpose is the giant hero; Philosophy is smaller beneath it; The Work is the centrepiece; everything else is quiet.
+Order (top to bottom): **Header → Purpose → Philosophy → The work → About.** (The standalone Why now and Vision sections were removed; see §6.4.) Copy below is **verbatim** apart from the hyphen convention noted above. Hierarchy: Purpose is the giant hero; Philosophy is smaller beneath it; The Work is the centrepiece; everything else is quiet.
 
 ### 6.1 Header — the name
 Small wordmark, top-left: **`Outbuild`** (just the word, medium weight — a quiet signature, not a big masthead). No tagline.
 
-### 6.2 Purpose — main hero (largest type on the page)
-> Most products do too much. We do less, better — human-centered design, stripped back to what matters.
+> **Punctuation convention (override):** the page uses a plain hyphen `-` in place of em dashes throughout the copy below. The copy is otherwise unchanged.
 
-Set big and confident; the visual anchor of the whole page. May break across lines for rhythm, with the "— human-centered design, stripped back to what matters" clause stepped down in size or weight.
+### 6.2 Purpose — main hero (largest type on the page)
+> Most products do too much. We do less, better - human-centered design, stripped back to what matters.
+
+Set big and confident; the visual anchor of the whole page. May break across lines for rhythm, with the "- human-centered design, stripped back to what matters" clause stepped down in size or weight.
 
 ### 6.3 Philosophy
 Label: **`PHILOSOPHY`**
 > We don't start with the product. We start with the problem. Then we take away everything that isn't the answer.
 
-### 6.4 Why now
-Label: **`WHY NOW`**
-> Everything's becoming an everything-tool. We'd rather build one thing that does one thing — properly.
-
-### 6.5 The work — the centrepiece
+### 6.4 The work — the centrepiece
 Label: **`THE WORK`**
-Intro line:
-> A growing set of small, simple products — each one solving a single real problem.
+
+> **Override:** the standalone **Why now** and **Vision** sections are removed. The Why now line is merged into the work intro below.
+
+Intro (Why now folded in):
+> Everything's becoming an everything-tool. We'd rather build one thing that does one thing - properly. A growing set of small, simple products - each one solving a single real problem.
 
 Four tiles. Each tile is a **link to that product's live site** and contains, in order:
-1. the signature lockup — `[Product Name] by Outbuild`
-2. the **situation line** (the pain point — set apart, quiet/observational)
+1. the signature lockup - `[Product Name] by Outbuild`
+2. the **situation line** (the pain point - set apart, quiet/observational)
 3. the **one-line description** of what it does
+4. the **product URL with a small `→` arrow** - the explicit, clearly-clickable affordance (this overrides the earlier "no arrow" rule)
 
-Keep product **features off** these tiles — only the situation line and the one do-this line. No sub-event chips, no category groupings (e.g. no "Running" divider), no numbered markers.
+Keep product **features off** these tiles - only the situation line, the one do-this line, and the URL. No sub-event chips, no category groupings, no numbered markers.
 
-**Tile layout:** a clean vertical stack (or simple grid) separated by hairline rules in `--hair` — an editorial "index of work" feel. No cards with heavy borders or shadows; space and hairlines do the structuring.
+**Tile layout:** a clean vertical stack separated by hairline rules in `--hair` - an editorial "index of work" feel. No cards with heavy borders or shadows; space and hairlines do the structuring.
 
 **The four tiles (verbatim):**
 
-**Race Spectator Planner — by Outbuild**
-- Situation: Two friends, two paces, one race — and no obvious place to stand to catch them both.
+**Race Spectator Planner - by Outbuild**
+- Situation: Two friends, two paces, one race - and no obvious place to stand to catch them both.
 - Does: Import a GPX route, add the runners, and see where each one will be, and when.
-- Link: _TODO — live URL, or mark "coming soon" and render as non-clickable._
+- Link: `https://racespectator.outbuild.uk` (shown as `racespectator.outbuild.uk →`)
 
-**Munro Tracker — by Outbuild**
+**Munro Tracker - by Outbuild**
 - Situation: Trip planning scattered across Walkhighlands, the bothy maps and a dozen tabs.
 - Does: Pulls the Munro and bothy resources into one place to plan the next route from Edinburgh.
-- Link: _TODO — live URL, or mark "coming soon"._
+- Link: `https://munro.outbuild.uk` (shown as `munro.outbuild.uk →`)
 
-**Explore — by Outbuild**
+**Explore - by Outbuild**
 - Situation: Every "best local spots" list on holiday is the same AI slop.
 - Does: A shareable map of real recommendations, in a host's own voice.
-- Link: _TODO — live URL, or mark "coming soon"._
+- Link: `https://explore.outbuild.uk` (shown as `explore.outbuild.uk →`)
 
-**Scorecard — by Outbuild**
+**Scorecard - by Outbuild**
 - Situation: A golf round scribbled on a crumpled card, lost before the car park.
-- Does: A clean digital golf scorecard — record the round, keep it, look back on it.
-- Link: _TODO — live URL, or mark "coming soon"._
-
-### 6.6 Vision
-Label: **`VISION`**
-> A world with fewer features and more clarity — where the small things are done right.
+- Does: A clean digital golf scorecard - record the round, keep it, look back on it.
+- Link: `https://scorecard.outbuild.uk` (shown as `scorecard.outbuild.uk →`) — now live; no longer "coming soon".
 
 ### 6.7 About — the footer beat
 Label: **`ABOUT`**
-> Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life — so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.
+> Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life - so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.
 
-_TODO (optional): a single contact line here if wanted — e.g. an email or one social link. Leave out entirely if the page is meant to be a closed shop, just the work._
+Contact line (included): `williamadamgriffiths@gmail.com`
 
 ---
 
@@ -148,7 +160,7 @@ _TODO (optional): a single contact line here if wanted — e.g. an email or one 
 ## 7. Motion
 
 - A gentle **staggered fade/rise on the Purpose lines** at page load.
-- The quiet **hover/focus affordance on work items** (colour shift or underline — no arrow, no movement of the lockup itself).
+- The quiet **hover/focus affordance on work items** (the URL + `→` arrow shift to `--accent`; no movement of the lockup itself).
 - **Nothing else.** Extra animation undercuts the restraint.
 - **All motion disabled under `prefers-reduced-motion: reduce`.**
 
@@ -158,7 +170,7 @@ _TODO (optional): a single contact line here if wanted — e.g. an email or one 
 - `prefers-reduced-motion: reduce` disables all motion, including hover transitions.
 - Responsive down to mobile; content held to a readable measure at all widths.
 - Sufficient contrast for `--ink` on `--paper`; `--muted` used only for secondary text and never as the sole carrier of essential meaning.
-- "Coming soon" tiles render as non-clickable (not a dead link); convey state to assistive tech.
+- All four work tiles are live links; the visible URL doubles as the click cue. (If a future product isn't live, render its tile as non-clickable and convey that state to assistive tech.)
 
 ## 9. Technical notes
 
