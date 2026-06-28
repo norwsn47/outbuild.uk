@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Outbuild</title>
-  <meta name="description" content="Outbuild is a small Edinburgh design collective. Less, better — a growing set of small, simple products, each one solving a single real problem." />
+  <meta name="description" content="Outbuild is a small Edinburgh design collective. Less, better - a growing set of small, simple products, each one solving a single real problem." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -183,19 +183,22 @@
       max-width: var(--prose);
     }
 
-    .tile-soon {
-      display: inline-block;
+    .tile-url {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.4em;
       margin-top: var(--s-3);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      font-size: 0.8125rem;
+      letter-spacing: 0.01em;
       color: var(--muted);
+      transition: color 220ms ease;
     }
 
-    /* Quiet hover/focus affordance — no arrow, no movement of the lockup */
-    a.tile:hover .by,
-    a.tile:focus-visible .by { color: var(--accent); }
+    .tile-url .arrow { font-size: 0.95em; line-height: 1; }
+
+    /* Clear clickable affordance - url + arrow shift to the accent on hover/focus */
+    a.tile:hover .tile-url,
+    a.tile:focus-visible .tile-url { color: var(--accent); }
 
     /* ── About contact ── */
     .about-contact { margin-top: var(--s-4); }
@@ -244,7 +247,7 @@
         animation: none;
         transform: none;
       }
-      .tile-lockup .by,
+      .tile-url,
       .about-contact a { transition: none; }
     }
 
@@ -271,7 +274,7 @@
         <h1 class="purpose" id="purpose">
           <span class="line">Most products do too much.</span>
           <span class="line">We do less, better</span>
-          <span class="clause">— human-centered design, stripped back to what matters.</span>
+          <span class="clause">- human-centered design, stripped back to what matters.</span>
         </h1>
       </section>
 
@@ -281,57 +284,48 @@
         <p class="statement">We don't start with the product. We start with the problem. Then we take away everything that isn't the answer.</p>
       </section>
 
-      <!-- 4 · Why now -->
-      <section aria-labelledby="why-now">
-        <p class="label" id="why-now">Why now</p>
-        <p class="statement">Everything's becoming an everything-tool. We'd rather build one thing that does one thing — properly.</p>
-      </section>
-
-      <!-- 5 · The work -->
+      <!-- 4 · The work -->
       <section aria-labelledby="the-work">
         <p class="label" id="the-work">The work</p>
-        <p class="work-intro">A growing set of small, simple products — each one solving a single real problem.</p>
+        <p class="work-intro">Everything's becoming an everything-tool. We'd rather build one thing that does one thing - properly. A growing set of small, simple products - each one solving a single real problem.</p>
 
         <div class="work-list">
 
           <a class="tile" href="https://racespectator.outbuild.uk">
             <p class="tile-lockup"><span class="product">Race Spectator Planner</span> <span class="by">by Outbuild</span></p>
-            <p class="tile-situation">Two friends, two paces, one race — and no obvious place to stand to catch them both.</p>
+            <p class="tile-situation">Two friends, two paces, one race - and no obvious place to stand to catch them both.</p>
             <p class="tile-does">Import a GPX route, add the runners, and see where each one will be, and when.</p>
+            <span class="tile-url">racespectator.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
           <a class="tile" href="https://munro.outbuild.uk">
             <p class="tile-lockup"><span class="product">Munro Tracker</span> <span class="by">by Outbuild</span></p>
             <p class="tile-situation">Trip planning scattered across Walkhighlands, the bothy maps and a dozen tabs.</p>
             <p class="tile-does">Pulls the Munro and bothy resources into one place to plan the next route from Edinburgh.</p>
+            <span class="tile-url">munro.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
           <a class="tile" href="https://explore.outbuild.uk">
             <p class="tile-lockup"><span class="product">Explore</span> <span class="by">by Outbuild</span></p>
             <p class="tile-situation">Every "best local spots" list on holiday is the same AI slop.</p>
             <p class="tile-does">A shareable map of real recommendations, in a host's own voice.</p>
+            <span class="tile-url">explore.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
-          <div class="tile">
+          <a class="tile" href="https://scorecard.outbuild.uk">
             <p class="tile-lockup"><span class="product">Scorecard</span> <span class="by">by Outbuild</span></p>
             <p class="tile-situation">A golf round scribbled on a crumpled card, lost before the car park.</p>
-            <p class="tile-does">A clean digital golf scorecard — record the round, keep it, look back on it.</p>
-            <span class="tile-soon">Coming soon</span>
-          </div>
+            <p class="tile-does">A clean digital golf scorecard - record the round, keep it, look back on it.</p>
+            <span class="tile-url">scorecard.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
+          </a>
 
         </div>
       </section>
 
-      <!-- 6 · Vision -->
-      <section aria-labelledby="vision">
-        <p class="label" id="vision">Vision</p>
-        <p class="statement">A world with fewer features and more clarity — where the small things are done right.</p>
-      </section>
-
-      <!-- 7 · About -->
+      <!-- 5 · About -->
       <section class="site-footer" aria-labelledby="about">
         <p class="label" id="about">About</p>
-        <p class="body-text">Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life — so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.</p>
+        <p class="body-text">Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life - so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.</p>
         <p class="about-contact"><a href="mailto:williamadamgriffiths@gmail.com">williamadamgriffiths@gmail.com</a></p>
       </section>
 
