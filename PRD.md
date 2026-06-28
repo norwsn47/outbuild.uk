@@ -56,6 +56,20 @@ Near-monochrome on warm paper, with at most **one** very quiet accent. No terrac
 - Body: **normal tracking, comfortable line-height.**
 - Small **uppercase labels** (letter-spaced, `--muted`, ~0.75rem) act as quiet section signposts. These are the only structural decoration.
 - **No numbered markers** (no 01 / 02 / 03). The work is a set, not a sequence.
+- **Exception — the wordmarks/lockups** (the four product names, the `by Outbuild` sign-off, and the header wordmark) do **not** use the page typeface. They follow the products' own `Logo` component so the brand reads identically here and on each live product. See §5.4.
+
+### 5.2.1 Wordmark spec (matches the products' `Logo` component)
+
+The naming lockup is a brand asset, not page typography. It uses the native **system font stack** and fixed proportions derived from a base size (the products render it at `size=40`; here the product name is set at the page's display scale and everything else scales from it):
+
+| Part | Rule |
+|---|---|
+| Font family | `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |
+| Product name | weight **700**, colour **`#1c1c1c`**, letter-spacing **-0.01em** |
+| ` by Outbuild` | font-size **0.6×** the name (the `0.36 / 0.6` ratio), weight **400**, colour **`#888888`** |
+| Layout | inline, **baseline-aligned**, gap **0.3em at the "by" size** (≈ `0.18em` of the name), line-height ~1 |
+
+All sizes scale proportionally with the product-name size. The header `Outbuild` wordmark uses the same system font, kept small at medium weight. On linked tiles the hover/focus affordance still applies (see §5.4) — `by Outbuild` shifts `#888888` → `--accent`.
 
 ### 5.3 Layout & mood
 
