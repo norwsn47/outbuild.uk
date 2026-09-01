@@ -146,7 +146,7 @@ Keep product **features off** these tiles - only the situation line, the one do-
 
 ### 6.7 About — the footer beat
 Label: **`ABOUT`**
-> Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life - so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.
+> Outbuild is a small Edinburgh design collective building small tools for the outdoors and active life. For now this is a place to build and show ideas, not sell them.
 
 Contact line (included): `williamadamgriffiths@gmail.com`
 
