@@ -102,7 +102,7 @@ Set big and confident; the visual anchor of the whole page. May break across lin
 
 ### 6.3 Philosophy
 Label: **`PHILOSOPHY`**
-> We don't start with the product. We start with the problem. Then we take away everything that isn't the answer.
+> We don't start with the product. We start with the problem. Then we take away everything that isn't part of the answer.
 
 ### 6.4 The work — the centrepiece
 Label: **`THE WORK`**
@@ -146,7 +146,7 @@ Keep product **features off** these tiles - only the situation line, the one do-
 
 ### 6.7 About — the footer beat
 Label: **`ABOUT`**
-> Outbuild is a small Edinburgh design collective. It comes from one person's love of the outdoors and active life - so that's where the building starts: the planning, the remembering, and the sharing around the things people do outside. For now this is a place to build and show ideas, not sell them.
+> Outbuild is a small Edinburgh design collective building small tools for the outdoors and active life. For now this is a place to build and show ideas, not sell them.
 
 Contact line (included): `williamadamgriffiths@gmail.com`
 
