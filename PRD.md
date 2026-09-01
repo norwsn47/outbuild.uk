@@ -102,7 +102,7 @@ Set big and confident; the visual anchor of the whole page. May break across lin
 
 ### 6.3 Philosophy
 Label: **`PHILOSOPHY`**
-> We don't start with the product. We start with the problem. Then we take away everything that isn't the answer.
+> We don't start with the product. We start with the problem. Then we take away everything that isn't part of the answer.
 
 ### 6.4 The work — the centrepiece
 Label: **`THE WORK`**
