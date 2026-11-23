@@ -267,15 +267,12 @@
 
     .contours path {
       fill: none;
-      stroke: #7048E8;          /* soft blue — kept faint via low opacity */
-      stroke-width: 1.25;
-      stroke-opacity: 0.32;
+      stroke: #CDC3B0;          /* a hair above the paper — only just there */
+      stroke-width: 1;
+      stroke-opacity: 0.85;
       stroke-linecap: round;
-      stroke-linejoin: round;
-      vector-effect: non-scaling-stroke;   /* stay a thin line at any width */
+      vector-effect: non-scaling-stroke;   /* stay a thin 1px line at any width */
     }
-
-    .contours .c-inner { stroke-opacity: 0.22; }   /* innermost sits furthest back */
 
     /* ── Purpose load motion (staggered fade/rise) ── */
     @keyframes rise {
@@ -384,15 +381,12 @@
 
   </div>
 
-  <!-- 6 · Faint contours rising from bottom-left, wrapping something off the bottom-right -->
+  <!-- 6 · Faint contours drifting off the page, bottom-left up to the right -->
   <div class="contours" aria-hidden="true">
-    <svg viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax meet" role="presentation" focusable="false">
-      <!-- outer: sweeps furthest up-left before curving down around the bottom-right -->
-      <path d="M -40 246 C 210 222, 388 150, 612 118 C 772 95, 918 100, 1046 141 C 1178 184, 1272 232, 1360 250 C 1418 262, 1452 258, 1500 240" />
-      <!-- middle: nested inside, a touch flatter and lower -->
-      <path d="M -40 282 C 268 258, 470 206, 726 176 C 884 157, 1018 162, 1138 206 C 1242 244, 1316 282, 1412 292 C 1448 296, 1476 292, 1520 280" />
-      <!-- inner: smallest arc, tucked toward the bottom-right, only partly in view -->
-      <path class="c-inner" d="M 300 320 C 560 296, 806 244, 988 224 C 1108 211, 1214 220, 1300 262 C 1356 290, 1396 312, 1460 318" />
+    <svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax meet" role="presentation" focusable="false">
+      <path d="M -60 214 C 190 206, 330 224, 500 206 C 670 188, 790 198, 960 184 C 1130 170, 1280 180, 1500 150" />
+      <path d="M -60 150 C 210 160, 360 134, 560 148 C 760 162, 880 112, 1060 122 C 1240 132, 1340 96, 1500 92" />
+      <path d="M -60 92 C 250 78, 430 102, 640 82 C 850 62, 960 56, 1140 64 C 1320 72, 1360 44, 1500 38" />
     </svg>
   </div>
 
