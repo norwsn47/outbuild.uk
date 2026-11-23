@@ -236,8 +236,19 @@
       outline-offset: 6px;
     }
 
+    /* Coming-soon tile - non-interactive, held a touch back */
+    .tile--soon { cursor: default; }
+    .tile--soon .product { color: var(--muted); }
+
     .site-footer {
+      padding-top: var(--s-5);
       padding-bottom: clamp(3rem, 8vw, 5rem);
+    }
+
+    .footer-line {
+      font-size: 0.8125rem;
+      letter-spacing: 0.01em;
+      color: var(--muted);
     }
 
     /* ── Purpose load motion (staggered fade/rise) ── */
@@ -294,16 +305,10 @@
         </h1>
       </section>
 
-      <!-- 3 · Philosophy -->
-      <section aria-labelledby="philosophy">
-        <p class="label" id="philosophy">Philosophy</p>
-        <p class="statement">We don't start with the product. We start with the problem. Then we take away everything that isn't part of the answer.</p>
-      </section>
-
-      <!-- 4 · The work -->
+      <!-- 3 · The work -->
       <section aria-labelledby="the-work">
         <p class="label" id="the-work">The work</p>
-        <p class="work-intro">Everything's becoming an everything-tool. We'd rather build one thing that does one thing - properly. A growing set of small, simple products - each one solving a single real problem.</p>
+        <p class="work-intro">Most tools try to do everything. We'd rather build one thing that does one job properly, and take out the friction around it. A growing set of small, simple products, each one solving a single real problem.</p>
 
         <div class="work-list">
 
@@ -312,13 +317,6 @@
             <p class="tile-situation">A golf round scribbled on a crumpled card, lost before the car park.</p>
             <p class="tile-does">A clean digital golf scorecard - record the round, keep it, look back on it.</p>
             <span class="tile-url">scorecard.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-
-          <a class="tile" href="https://explore.outbuild.uk">
-            <p class="tile-lockup"><span class="product">Explore</span> <span class="by">by Outbuild</span> <span class="tile-beta">beta</span></p>
-            <p class="tile-situation">Every "best local spots" list on holiday is the same AI slop.</p>
-            <p class="tile-does">A shareable map of real recommendations, in a host's own voice.</p>
-            <span class="tile-url">explore.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
           <a class="tile" href="https://munro.outbuild.uk">
@@ -335,17 +333,28 @@
             <span class="tile-url">racespectator.outbuild.uk <span class="arrow" aria-hidden="true">→</span></span>
           </a>
 
+          <div class="tile tile--soon">
+            <p class="tile-lockup"><span class="product">Explore</span> <span class="by">by Outbuild</span> <span class="tile-beta">coming soon</span></p>
+            <p class="tile-situation">Guests get the same generic "best local spots" list as every other rental.</p>
+            <p class="tile-does">A shareable map of real recommendations, in a host's own voice.</p>
+          </div>
+
         </div>
       </section>
 
-      <!-- 5 · About -->
-      <section class="site-footer" aria-labelledby="about">
+      <!-- 4 · About -->
+      <section aria-labelledby="about">
         <p class="label" id="about">About</p>
-        <p class="body-text">Outbuild is a small Edinburgh design collective building small tools for the outdoors and active life. For now this is a place to build and show ideas, not sell them.</p>
+        <p class="body-text">Outbuild is a small design collective in Edinburgh. The name comes from the outbuilding: a small place for trying things out, like a workshop. We build the same way, testing simple ideas until only the useful part is left.</p>
         <p class="about-contact"><a href="mailto:williamadamgriffiths@gmail.com">williamadamgriffiths@gmail.com</a></p>
       </section>
 
     </main>
+
+    <!-- 5 · Footer -->
+    <footer class="site-footer">
+      <p class="footer-line">Outbuild, Edinburgh.</p>
+    </footer>
 
   </div>
 
