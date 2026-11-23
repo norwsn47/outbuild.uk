@@ -239,22 +239,14 @@
     /* Coming-soon tile - non-interactive, name stays full-strength */
     .tile--soon { cursor: default; }
 
-    .site-footer {
-      padding-top: var(--s-5);
-      padding-bottom: var(--s-4);
-    }
-
-    .footer-line {
-      font-size: 0.8125rem;
-      letter-spacing: 0.01em;
-      color: var(--muted);
-    }
+    /* Trim the tail — About is the last block before the contours */
+    .about-section { padding-bottom: var(--s-4); }
 
     /* ── Faint topographic contours — decorative, full-bleed, below all text ── */
     .contours {
       width: 100%;
-      margin-top: var(--s-2);
-      padding-bottom: clamp(1rem, 4vw, 2.5rem);
+      margin-top: 0;
+      padding-bottom: clamp(1.25rem, 3vw, 2rem);
       overflow: hidden;
       pointer-events: none;
     }
@@ -366,7 +358,7 @@
       </section>
 
       <!-- 4 · About -->
-      <section aria-labelledby="about">
+      <section class="about-section" aria-labelledby="about">
         <p class="label" id="about">About</p>
         <p class="body-text">Outbuild is a small design collective in Edinburgh. The name comes from the outbuilding: a small place for trying things out, like a workshop. We build the same way, testing simple ideas until only the useful part is left.</p>
         <p class="about-contact"><a href="mailto:williamadamgriffiths@gmail.com">williamadamgriffiths@gmail.com</a></p>
@@ -374,14 +366,9 @@
 
     </main>
 
-    <!-- 5 · Footer -->
-    <footer class="site-footer">
-      <p class="footer-line">Outbuild, Edinburgh.</p>
-    </footer>
-
   </div>
 
-  <!-- 6 · Faint contours drifting off the page, bottom-left up to the right -->
+  <!-- 5 · Faint contours drifting off the page, bottom-left up to the right -->
   <div class="contours" aria-hidden="true">
     <svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax meet" role="presentation" focusable="false">
       <path d="M -60 214 C 190 206, 330 224, 500 206 C 670 188, 790 198, 960 184 C 1130 170, 1280 180, 1500 150" />
