@@ -241,13 +241,37 @@
 
     .site-footer {
       padding-top: var(--s-5);
-      padding-bottom: clamp(3rem, 8vw, 5rem);
+      padding-bottom: var(--s-4);
     }
 
     .footer-line {
       font-size: 0.8125rem;
       letter-spacing: 0.01em;
       color: var(--muted);
+    }
+
+    /* ── Faint topographic contours — decorative, full-bleed, below all text ── */
+    .contours {
+      width: 100%;
+      margin-top: var(--s-2);
+      padding-bottom: clamp(1rem, 4vw, 2.5rem);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .contours svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .contours path {
+      fill: none;
+      stroke: #CDC3B0;          /* a hair above the paper — only just there */
+      stroke-width: 1;
+      stroke-opacity: 0.85;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;   /* stay a thin 1px line at any width */
     }
 
     /* ── Purpose load motion (staggered fade/rise) ── */
@@ -355,6 +379,15 @@
       <p class="footer-line">Outbuild, Edinburgh.</p>
     </footer>
 
+  </div>
+
+  <!-- 6 · Faint contours drifting off the page, bottom-left up to the right -->
+  <div class="contours" aria-hidden="true">
+    <svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax meet" role="presentation" focusable="false">
+      <path d="M -60 214 C 190 206, 330 224, 500 206 C 670 188, 790 198, 960 184 C 1130 170, 1280 180, 1500 150" />
+      <path d="M -60 150 C 210 160, 360 134, 560 148 C 760 162, 880 112, 1060 122 C 1240 132, 1340 96, 1500 92" />
+      <path d="M -60 92 C 250 78, 430 102, 640 82 C 850 62, 960 56, 1140 64 C 1320 72, 1360 44, 1500 38" />
+    </svg>
   </div>
 
 </body>
